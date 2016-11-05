@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>圆形碰撞</title>
+		<style type="text/css">
+			.box {
+				width: 120px;
+				height: 120px;
+				background: radial-gradient(white, green);
+				border-radius: 50%;
+				position: absolute;
+			}
+			
+			.move {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				background: radial-gradient(yellow, red);
+			}
+			
+			#box1 {
+				left: 600px;
+				top: 150px;
+			}
+			
+			#box2 {
+				left: 200px;
+				top: 200px;
+			}
+			
+			#box3 {
+				left: 400px;
+				top: 200px;
+			}
+			
+			#box4 {
+				left: 200px;
+				top: 400px;
+			}
+			
+			#box5 {
+				left: 500px;
+				top: 600px;
+			}
+			
+			#box6 {
+				left: 450px;
+				top: 450px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="move"></div>
+		<div class="box" id="box1"></div>
+		<div class="box" id="box2"></div>
+		<div class="box" id="box3"></div>
+		<div class="box" id="box4"></div>
+		<div class="box" id="box5"></div>
+		<div class="box" id="box6"></div>
+	</body>
+	<script type="text/javascript">
+		var move = document.querySelector('.move');
+		var hit = document.querySelectorAll('#box1,#box2,#box3,#box4,#box5,#box6');
+		//碰撞函数
+		function pz(ball1, ball2) {
+			var r1 = ball1.offsetHeight / 2;
+			var r2 = ball2.offsetHeight / 2;
+			var l1 = ball1.offsetLeft;
+			var t1 = ball1.offsetTop;
+			var l2 = ball2.offsetLeft;
+			var t2 = ball2.offsetTop;
+			var a = (l2 + r2) - (l1 + r1);
+			var b = (t2 + r2) - (t1 + r1);
+			var diff = Math.sqrt(a * a + b * b);
+			if(diff > r1 + r2) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		//添加监听事件
+		move.onmousedown = function(e) {
+			e = event || window.event;
+			var disX = e.clientX - move.offsetLeft;
+			var disY = e.clientY - move.offsetTop;
+			document.onmousemove = function(e) {
+				var x = e.clientX - disX;
+				var y = e.clientY - disY;
+				for(i = 0; i < hit.length; i++) {
+					var bol = pz(move, hit[i]);
+					if(bol) {
+						hit[i].style.background = 'radial-gradient(white,green)';
+					} else {
+						hit[i].style.background = 'radial-gradient(white,black)';
+					}
+				}
+				move.style.top = y + 'px';
+				move.style.left = x + 'px';
+			}
+		}
+		document.onmouseup = function() {
+			document.onmousemove = null;
+		}
+	</script>
+
+</html>

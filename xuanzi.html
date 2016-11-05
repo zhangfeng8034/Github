@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选字游戏</title>
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+				/*border: 1px solid black;*/
+			}
+			
+			.wrap {
+				width: 400px;
+				text-align: center;
+				background: lightgray;
+				margin: auto;
+				margin-top: 50px;
+				border: 3px solid black;
+			}
+			
+			.top {
+				width: 100%;
+				margin: 10px 0;
+			}
+			
+			.left {
+				width: 50%;
+				height: 50px;
+				margin-right: 30px;
+				padding: 10px 0;
+				font-size: 2rem;
+				display: inline-block;
+			}
+			
+			.right {
+				width: 40%;
+				height: 50px;
+				font-size: 2rem;
+				padding: 10px 0;
+				display: inline-block;
+			}
+			
+			.show {
+				width: 150px;
+				height: 150px;
+				margin: auto;
+				margin-top: 20px;
+				font-size: 10rem;
+			}
+			
+			.rule {
+				width: 100%;
+				margin-top: 40px;
+			}
+			
+			.rule p {
+				font-size: 2rem;
+			}
+			
+			.bottom {
+				width: 100%;
+				padding: 20px 0;
+				margin-top: 20px;
+			}
+			
+			.bottom>.word {
+				width: 70px;
+				height: 70px;
+				display: inline-block;
+				padding: 10px 0;
+				font-size: 4rem;
+				border: 1px solid black;
+			}
+			
+			.foot {
+				font-size: 1.2rem;
+				color: red;
+				padding: 10px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="wrap">
+			<div class="top">
+				<div class="left">剩余时间：60</div>
+				<div class="right">完成：0</div>
+			</div>
+			<div class="show"></div>
+			<div class="rule">
+				<p>根据上面的字的颜色从</p>
+				<p>下面选择正确的字，选</p>
+				<p>择正确自动开始</p>
+			</div>
+			<div class="bottom">
+				<div class="word"></div>
+				<div class="word"></div>
+				<div class="word"></div>
+				<div class="word"></div>
+				<div class="word"></div>
+			</div>
+			<div class="foot">试试是不是老年痴呆</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//获取元素
+		var times = document.querySelector('.left');
+		var scoring = document.querySelector('.right');
+		var show = document.querySelector('.show');
+		var list = document.querySelectorAll('.word');
+		//创建数组
+		var colors = ['red', 'yellow', 'green', 'blue', 'black'];
+		var fonts = ['红', '黄', '绿', '蓝', '黑'];
+		//定义变量
+		var time = 60;
+		var score = 0;
+		var colorIndex = 0;
+		var fontIndex = 0;
+		var timer = null;
+		//生成一个随机数并返回
+		function ranFn() {
+			var random = Math.floor(Math.random() * 5);
+			return random;
+		}
+		//改变题目字与颜色
+		function showRan() {
+			colorIndex = ranFn();
+			fontIndex = ranFn();
+			show.innerHTML = fonts[fontIndex];
+			show.style.color = colors[colorIndex];
+		}
+		//生成一组随机数并返回
+		function ranArr() {
+			var arr = []
+			while(arr.length < fonts.length) {
+				var rand = ranFn();
+				var bol = true;
+				for(i = 0; i < arr.length; i++) {
+					if(rand == arr[i]) {
+						bol = false;
+						break;
+					} else {
+						bol = true;
+					}
+				}
+				if(bol) {
+					arr.push(rand);
+				}
+			}
+			return arr;
+		}
+		//改变选项颜色和字
+		function updateList() {
+			var color = ranArr();
+			var font = ranArr();
+			for(i = 0; i < list.length; i++) {
+				list[i].innerHTML = fonts[font[i]];
+				list[i].style.color = colors[color[i]];
+				list[i].fontIndex = font[i];
+			}
+		}
+		//绑定点击事件，判断游戏是否开始
+		var flag;
+		for(var i = 0; i < list.length; i++) {
+			list[i].onclick = function() {
+				if(this.fontIndex == colorIndex && time != 0) {
+					updateList();
+					showRan();
+					flag = true;
+					score += 1;
+					scoring.innerHTML = '完成：' + score;
+				}
+			}
+		}
+		//倒计时
+		timer = setInterval(function() {
+			if(flag) {
+				if(time == 0) {
+					flag = false;
+					alert('游戏结束！！！');
+				} else {
+					time--;
+					times.innerHTML = "剩余时间：" + time;
+				}
+			}
+		}, 1000);
+		updateList();
+		showRan();
+	</script>
+
+</html>

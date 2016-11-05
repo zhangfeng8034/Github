@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>时钟</title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			var body_ = document.getElementsByTagName('body')[0];
+			body_.style.width = '100%';
+			var main = document.createElement('div');
+			main.style.width = '400px';
+			main.style.height = '400px';
+			main.style.border = '5px solid gray';
+			main.style.background = 'rgb(224,224,224)';
+			main.style.borderRadius = '50%';
+			main.style.margin = 'auto';
+			main.style.position = 'relative';
+			main.style.marginTop = '100px';
+			body_.appendChild(main);
+			for(var i = 0; i < 30; i++) {
+				var kdDiv = document.createElement('div');
+				kdDiv.style.width = '2px';
+				kdDiv.style.height = '384px';
+				kdDiv.style.borderTop = '8px solid black';
+				kdDiv.style.borderBottom = '8px solid black';
+				kdDiv.style.position = 'absolute';
+				kdDiv.style.left = '199px';
+				kdDiv.style.top = '0px';
+				kdDiv.style.transform = 'rotateZ(' + i * 6 + 'deg)';
+				main.appendChild(kdDiv);
+				switch(i) {
+					case 0:
+						ts();
+						break;
+					case 15:
+						ts();
+						break;
+					case 5:
+						ts1();;
+						break;
+					case 10:
+						ts1();
+						break;
+					case 20:
+						ts1();
+						break;
+					case 25:
+						ts1();
+						break;
+					default:
+						break;
+				}
+			}
+			for(var i = 1; i <= 12; i++) {
+				var word = document.createElement('div');
+				word.style.width = '20px';
+				word.style.height = '360px';
+				word.style.position = 'absolute';
+				word.style.left = '195px';
+				word.style.top = '20px';
+				word.style.transform = 'rotateZ(' + i * 30 + 'deg)';
+				main.appendChild(word);
+				var words = document.createElement('div');
+				words.innerText = i;
+				words.style.transform = 'rotateZ(' + i * -30 + 'deg)';
+				word.appendChild(words);
+			}
+			var hourDiv = document.createElement('div');
+			hourDiv.style.width = '6px';
+			hourDiv.style.borderTop = '100px solid red';
+			hourDiv.style.borderBottom = '100px solid transparent';
+			hourDiv.style.position = 'absolute';
+			hourDiv.style.left = '197px';
+			hourDiv.style.top = '100px';
+			main.appendChild(hourDiv);
+			var minuteDiv = document.createElement('div');
+			minuteDiv.style.width = '4px';
+			minuteDiv.style.borderTop = '130px solid blue';
+			minuteDiv.style.borderBottom = '130px solid transparent';
+			minuteDiv.style.position = 'absolute';
+			minuteDiv.style.left = '198px';
+			minuteDiv.style.top = '70px';
+			main.appendChild(minuteDiv);
+			var secondDiv = document.createElement('div');
+			secondDiv.style.width = '2px';
+			secondDiv.style.borderTop = '150px solid black';
+			secondDiv.style.borderBottom = '150px solid transparent';
+			secondDiv.style.position = 'absolute';
+			secondDiv.style.left = '199px';
+			secondDiv.style.top = '50px';
+			main.appendChild(secondDiv);
+
+			function ts() {
+				kdDiv.style.width = '6px';
+				kdDiv.style.height = '370px';
+				kdDiv.style.borderTop = '15px solid red';
+				kdDiv.style.borderBottom = '15px solid red';
+			}
+
+			function ts1() {
+				kdDiv.style.width = '4px';
+				kdDiv.style.height = '376px';
+				kdDiv.style.borderTop = '12px solid blue';
+				kdDiv.style.borderBottom = '12px solid blue';
+			}
+			setInterval(function() {
+				var myDate = new Date();
+				var h = myDate.getHours();
+				var m = myDate.getMinutes();
+				var s = myDate.getSeconds();
+				hourDiv.style.transform = 'rotateZ(' + ((30 * m / 60) + (h * 30) + (30 * s / 60 / 60)) + 'deg)';
+				minuteDiv.style.transform = 'rotateZ(' + ((6 * m) + (s * 6 / 60)) + 'deg)';
+				secondDiv.style.transform = 'rotateZ(' + s * 6 + 'deg)';
+			}, 1000)
+		</script>
+	</body>
+
+</html>

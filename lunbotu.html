@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>无缝滚动</title>
+		<style type="text/css">
+			#mask {
+				width: 500px;
+				height: 300px;
+				margin: auto;
+				margin-top: 50px;
+				font-size: 0px;
+				overflow: hidden;
+				border: 1px solid red;
+			}
+			
+			#wrap {
+				width: 5000px;
+				height: 300px;
+			}
+			
+			#wrap img {
+				width: 500px;
+				height: 300px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="mask">
+			<div id="wrap">
+				<img src="img/11.jpg" alt="" />
+				<img src="img/13.jpg" alt="" />
+				<img src="img/10.jpg" alt="" />
+				<img src="img/12.jpg" alt="" />
+			</div>
+		</div>
+		<script type="text/javascript">
+			var wrap = document.getElementById('wrap');
+			var imgs = document.getElementsByTagName('img');
+			var width_ = imgs[0].offsetWidth * imgs.length;
+			var step = 0;
+			var timer = null;
+
+			function move() {
+				step -= 2;
+				if(step <= -width_) {
+					step = 0;
+				}
+				wrap.style.marginLeft = step + 'px';
+			}
+
+			function auto() {
+				timer = setInterval('move()', 10);
+			}
+
+			function clear() {
+				clearInterval(timer);
+			}
+			wrap.onmouseover = clear;
+			wrap.onmouseout = auto;
+			auto();
+			wrap.innerHTML += wrap.innerHTML;
+		</script>
+	</body>
+
+</html>

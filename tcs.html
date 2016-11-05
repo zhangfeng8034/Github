@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>贪吃蛇</title>
+		<style type="text/css">
+			.wrap {
+				text-align: center;
+				margin-top: 50px;
+			}
+			
+			.main {
+				margin: auto;
+				border: 3px solid black;
+				font-size: 0;
+			}
+			
+			.col {
+				width: 20px;
+				height: 20px;
+				border: 1px solid black;
+				display: inline-block;
+				background: lightcyan;
+			}
+			
+			.activeSnake {
+				background: green;
+			}
+			
+			.egg {
+				background: red;
+				border-radius: 50%;
+			}
+			
+			.strat {
+				width: 80px;
+				font-size: 2rem;
+				padding: 10px;
+				margin: auto;
+				margin-bottom: 20px;
+				border: 2px solid black;
+				border-radius: 5px;
+			}
+			
+			.score {
+				font-size: 2rem;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="wrap">
+			<div class="strat">开始</div>
+			<div class="score">得分：0</div>
+			<div class="main"></div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var main = document.querySelector('.main');
+		var colNum = 20;
+		var rowNum = 30;
+		var canvasArr = [];
+		var time = 200;
+		var snakeBody = [];
+		var x = 2;
+		var y = 0;
+		var direction = 'right';
+		var start = document.querySelector('.strat');
+		start.onclick = snakeMove;
+		var score = document.querySelector('.score');
+
+		function canvasBg() {
+			for(var i = 0; i < rowNum; i++) {
+				var rowDiv = document.createElement('div');
+				var rowArr = [];
+				for(var j = 0; j < colNum; j++) {
+					var colDiv = document.createElement('div');
+					colDiv.className = 'col';
+					rowDiv.appendChild(colDiv);
+					rowArr.push(colDiv);
+				}
+				main.appendChild(rowDiv);
+				canvasArr.push(rowArr);
+			}
+			main.style.width = colNum * 20 + colNum * 2 + 'px';
+		}
+
+		var delayTime = null;
+		var change = true;
+		document.onkeydown = function(event) {
+			if(!change) {
+				return;
+			}
+			event = event || window.event;
+			if(direction == 'right' && event.keyCode == 37) {
+				return;
+			}
+			if(direction == 'left' && event.keyCode == 39) {
+				return;
+			}
+			if(direction == 'up' && event.keyCode == 40) {
+				return;
+			}
+			if(direction == 'down' && event.keyCode == 38) {
+				return;
+			}
+			switch(event.keyCode) {
+				case 37:
+					direction = 'left';
+					break;
+				case 38:
+					direction = 'up';
+					break;
+				case 39:
+					direction = 'right';
+					break;
+				case 40:
+					direction = 'down';
+					break;
+				default:
+					break;
+			}
+			change = false;
+			delayTime = setTimeout(function() {
+				change = true;
+			}, time);
+		}
+
+		function snake() {
+			for(i = 0; i < 3; i++) {
+				canvasArr[0][i].className = 'col activeSnake';
+				snakeBody.push(canvasArr[0][i]);
+			}
+		}
+
+		var flag = 0;
+
+		function snakeMove() {
+			var sTimer = setInterval(function() {
+				switch(direction) {
+					case 'left':
+						x--;
+						break;
+					case 'right':
+						x++;
+						break;
+					case 'up':
+						y--;
+						break;
+					case 'down':
+						y++;
+						break;
+					default:
+						break;
+				}
+
+				if(y < 0 || y >= rowNum || x < 0 || x >= colNum) {
+					alert('GAME OVER!!!');
+					clearInterval(sTimer);
+					return;
+				}
+
+				for(var i = 0; i < snakeBody.length; i++) {
+					if(snakeBody[i] == canvasArr[y][x]) {
+						alert('GAME OVER!!!');
+						clearInterval(sTimer);
+						return;
+					}
+				}
+
+				if(eggX == x && eggY == y) {
+					canvasArr[eggY][eggX].className = 'col activeSnake';
+					snakeBody.push(canvasArr[eggY][eggX]);
+					flag++;
+					score.innerHTML = '得分：' + flag;
+					creatEgg();
+				} else {
+					snakeBody[0].className = 'col';
+					snakeBody.shift();
+					canvasArr[y][x].className = 'col activeSnake';
+					snakeBody.push(canvasArr[y][x]);
+				}
+			}, time);
+		}
+
+		function ran(max) {
+			var rand = Math.floor(Math.random() * max);
+			return rand;
+		}
+
+		function creatEgg() {
+			eggX = ran(colNum);
+			eggY = ran(rowNum);
+			if(canvasArr[eggY][eggX].className == 'col activeSnake') {
+				creatEgg();
+			} else {
+				canvasArr[eggY][eggX].className = 'col egg';
+			}
+		}
+		canvasBg();
+		snake();
+		creatEgg();
+	</script>
+
+</html>

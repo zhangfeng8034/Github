@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>右键菜单</title>
+		<style type="text/css">
+			.wrap {
+				width: 150px;
+				height: 250px;
+				padding: 10px 0;
+				border: 1px solid black;
+				border-radius: 10px;
+				background: rgb(224,224,224);
+				text-align: center;
+				display: none;
+			}
+			.word {
+				width: 100%;
+				padding: 10px 0;
+			}
+			.word:hover {
+				background: deepskyblue;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="word">返回</div>
+			<div class="word">前进</div>
+			<div class="word">重新加载</div>
+			<div class="word">存储为...</div>
+			<div class="word">打印...</div>
+			<div class="word">投射...</div>
+			<div class="word">检查</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var wrap=document.querySelector('.wrap');
+		var bWidth=document.documentElement.clientWidth;
+		var bHeight=document.documentElement.clientHeight;
+		document.addEventListener('contextmenu',function(){
+			wrap.style.display='block';
+			var boxWidth=wrap.offsetWidth;
+			var sWidth=bWidth-event.clientX;
+			var boxHeight=wrap.offsetHeight;
+			var sHeight=bHeight-event.clientY;
+			//判断宽高
+			var left_=event.clientX;
+			var top_=event.clientY;
+			if(sWidth<boxWidth) {
+				left_=event.clientX-boxWidth;
+			}
+			if(sHeight<boxHeight) {
+				top_=event.clientY-boxHeight;
+			}
+			wrap.style.position='absolute';
+			wrap.style.left=left_+'px';
+			wrap.style.top=top_+'px';
+			event.preventDefault();
+		});
+		document.addEventListener('mousedown',function(){
+			wrap.style.display='none';
+		});
+	</script>
+</html>

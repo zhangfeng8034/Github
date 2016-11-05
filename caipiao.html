@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>3D 彩票</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var arr=[];
+			var arrN=[];
+			for(j=0;j<10;j++){
+				var test='';
+				for(i=0;i<7;i++) {
+					var randomA=Math.floor(Math.random()*36);
+					arrN.push(randomA);
+					test+=randomA+',';
+				}
+				document.write(test+'<br>')
+				arr.push(arrN);
+				arrN=[];
+			}
+		</script>
+	</body>
+</html>

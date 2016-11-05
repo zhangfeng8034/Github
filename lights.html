@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>关灯游戏</title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			var lightWidth = 50;
+			var lightHeight = 50;
+			var lightLine = 50;
+			var lightBorder = 1;
+			var lightCol = 10;
+			var lightRow = 10;
+			var beforeBg = 'black';
+			var afterBg = 'yellow';
+			var shadow1 = '5px 5px 5px rgb(100,100,100)';
+			var shadow2 = '5px 5px 5px yellow';
+			var lightMargin = 5;
+
+			var body_ = document.querySelector('body');
+			body_.style.textAlign = 'center';
+			var main = document.createElement('div');
+			main.style.width = lightCol * lightWidth + lightCol * lightBorder * 2 + lightCol * lightMargin * 2 + 'px';
+			main.style.margin = 'auto';
+			main.style.marginTop = '100px';
+			main.style.background = 'lightseagreen';
+			main.style.border = '5px solid blue';
+			body_.appendChild(main);
+			var diff = document.createElement('div')
+			body_.appendChild(diff);
+			var btns = [];
+			for(i = 1; i <= 5; i++) {
+				var btn = document.createElement('button');
+				btn.style.background = 'greenyellow';
+				btn.style.fontSize = '1rem';
+				btn.style.borderRadius = '10px';
+				btn.style.outline = 'none';
+				btn.style.marginTop = '20px';
+				btn.innerText = '关卡' + i;
+				btns.push(btn);
+				diff.appendChild(btn);
+			}
+			btns[0].onclick = Ran1;
+			btns[1].onclick = Ran2;
+			btns[2].onclick = Ran3;
+			btns[3].onclick = Ran4;
+			btns[4].onclick = Ran5;
+
+			var btn1 = document.createElement('button')
+			btn1.innerText = '放弃';
+			btn1.style.background = 'skyblue';
+			btn1.style.fontSize = '2rem';
+			btn1.style.borderRadius = '10px';
+			btn1.style.outline = 'none';
+			btn1.style.marginTop = '20px';
+			btn1.style.marginLeft = '20px';
+			btn1.onclick = giveUp;
+			body_.appendChild(btn1);
+			var lights = [];
+			for(i = 0; i < lightCol * lightRow; i++) {
+				var lightItem = document.createElement('div');
+				lightItem.style.width = lightWidth + 'px';
+				lightItem.style.height = lightHeight + 'px';
+				lightItem.style.border = lightBorder + 'px solid white';
+				lightItem.style.background = beforeBg;
+				lightItem.style.color = 'gray';
+				lightItem.style.lineHeight = lightLine + 'px';
+				lightItem.style.margin = lightMargin + 'px';
+				lightItem.style.display = 'inline-block';
+				lightItem.style.boxShadow = shadow1;
+				lightItem.style.borderRadius = '50%';
+				//				lightItem.innerText=i;
+				lightItem.index = i;
+				lightItem.on_off = false;
+				lightItem.onclick = clickLight;
+				lights.push(lightItem);
+				main.appendChild(lightItem);
+			}
+			var flag = 0;
+
+			function clickLight() {
+				panduan(this);
+				if(flag == 0) {
+					setTimeout(function() {
+						alert('YOU WIN!!!');
+					}, 10);
+				} else {
+
+				}
+			}
+
+			function panduan(aa) {
+				on_off(aa);
+				if(aa.index % lightCol != 0) {
+					on_off(lights[aa.index - 1]);
+				}
+				if(aa.index > (lightCol - 1)) {
+					on_off(lights[aa.index - lightCol]);
+				}
+				if((aa.index % lightCol) != (lightCol - 1)) {
+					on_off(lights[aa.index + 1]);
+				}
+				if(aa.index < (lightCol * lightRow - lightCol)) {
+					on_off(lights[aa.index + lightCol]);
+				}
+			}
+
+			function on_off(item_) {
+				if(item_.on_off == false) {
+					item_.style.background = afterBg;
+					item_.style.boxShadow = shadow2;
+					item_.on_off = true;
+					flag++;
+				} else {
+					item_.style.background = beforeBg;
+					item_.style.boxShadow = shadow1;
+					item_.on_off = false;
+					flag--;
+				}
+			}
+
+			function Ran1(aa) {
+				for(i = 0; i < 20; i++) {
+					var Ran = parseInt(Math.random() * 100);
+					console.log(Ran);
+					panduan(lights[Ran]);
+				}
+			}
+
+			function Ran2(aa) {
+				for(i = 0; i < 30; i++) {
+					var Ran = parseInt(Math.random() * 100);
+					console.log(Ran);
+					panduan(lights[Ran]);
+				}
+			}
+
+			function Ran3(aa) {
+				for(i = 0; i < 40; i++) {
+					var Ran = parseInt(Math.random() * 100);
+					console.log(Ran);
+					panduan(lights[Ran]);
+				}
+			}
+
+			function Ran4(aa) {
+				for(i = 0; i < 50; i++) {
+					var Ran = parseInt(Math.random() * 100);
+					console.log(Ran);
+					panduan(lights[Ran]);
+				}
+			}
+
+			function Ran5(aa) {
+				for(i = 0; i < 60; i++) {
+					var Ran = parseInt(Math.random() * 100);
+					console.log(Ran);
+					panduan(lights[Ran]);
+				}
+			}
+
+			function giveUp() {
+				alert('弱爆了！！！');
+				history.go(0);
+			}
+		</script>
+	</body>
+
+</html>

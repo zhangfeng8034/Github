@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>打砖块</title>
+		<style type="text/css">
+			.wrap {
+				width: 800px;
+				height: 600px;
+				border: 3px solid black;
+				margin: auto;
+				margin-top: 50px;
+				position: relative;
+			}
+			.box {
+				width: 100px;
+				height: 100px;
+				background: red;
+				position: absolute;
+			}
+			.flap {
+				width: 200px;
+				height: 20px;
+				background: gray;
+				position: absolute;
+				bottom: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="box"></div>
+			<div class="flap"></div>
+		</div>
+		
+	</body>
+	<script type="text/javascript">
+		var wrap=document.querySelector('.wrap');
+		var box=document.querySelector('.box');
+		var flap=document.querySelector('.flap');
+		var speedX=2;
+		var speedY=2;
+		var distanceX=0;
+		var distanceY=0;
+		var timer=null;
+		var w_width=wrap.offsetWidth;
+		var w_height=wrap.offsetHeight;
+		var b_width=box.offsetWidth;
+		var b_height=box.offsetHeight;
+		var f_width=flap.offsetWidth;
+		var f_height=flap.offsetHeight;
+		//让方块动
+		function move() {
+			distanceX+=speedX;
+			distanceY+=speedY
+			if(distanceX>w_width-b_width-2 || distanceX==0) {
+				speedX=-speedX;
+			}
+			if(distanceY>w_height-b_height-2 || distanceY==0) {
+				speedY=-speedY;
+			}
+			
+			box.style.left=distanceX+'px';
+			box.style.top=distanceY+'px';
+			if(((distanceY>=flap.offsetTop-b_height-2)&&(distanceX+b_width>flap.offsetLeft)&&(box.offsetLeft-flap.offsetLeft<f_width))|| distanceY<=0) {
+				speedY=-speedY;
+			}
+		}
+		function auto() {
+			timer=setInterval('move()',10);
+		}
+		auto();
+		//给挡板绑定键盘事件
+		var speedF=30;
+		document.addEventListener('keydown',function() {
+			var event=window.event||event;
+			console.log(event.keyCode);
+			switch (event.keyCode){
+				case 37:
+					flap.style.left=flap.offsetLeft-speedF+'px';
+					if(flap.offsetLeft-speedF<0) {
+						flap.style.left=0;
+					}
+					break;
+				case 38:
+					flap.style.top=flap.offsetTop-speedF+'px';
+					if(flap.offsetTop-speedF<0) {
+						flap.style.top=0;
+					}
+					break;
+				case 39: 
+					flap.style.left=flap.offsetLeft+speedF+'px';
+					if(flap.offsetLeft+speedF>w_width-f_width) {
+						flap.style.left=w_width-f_width+'px';
+					}
+					break;
+				case 40:
+					flap.style.top=flap.offsetTop+speedF+'px';
+					if(flap.offsetTop+speedF>w_height-f_height) {
+						flap.style.top=w_height-f_height+'px';
+					}
+					break;
+				default:
+					break;
+			}
+		});
+	</script>
+</html>

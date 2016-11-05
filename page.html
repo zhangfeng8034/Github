@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>触摸翻页</title>
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			body {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.wrap {
+				width: 100%;
+				position: relative;
+				font-size: 6rem;
+				overflow: hidden;
+			}
+			
+			.page {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			
+			.page img {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.zThisInd {
+				z-index: 9;
+			}
+			
+			.zNextInd {
+				z-index: 8;
+			}
+			/*.page:nth-child(1) {background: lightblue;}
+			.page:nth-child(2) {background: lightcoral;}
+			.page:nth-child(3) {background: lightgreen;}
+			.page:nth-child(4) {background: cyan;}
+			.page:nth-child(5) {background: lime;}*/
+		</style>
+	</head>
+
+	<body>
+		<div class="wrap">
+			<div class="page zThisInd"><img src="img/1-8.jpg" /></div>
+			<div class="page"><img src="img/1-6.jpg" /></div>
+			<div class="page"><img src="img/1-4.png" /></div>
+			<div class="page"><img src="img/1-5.jpg" /></div>
+			<div class="page"><img src="img/1-7.jpg" /></div>
+			<div class="page"><img src="img/1-9.jpg" /></div>
+			<div class="page"><img src="img/1-10.jpg" /></div>
+			<div class="page"><img src="img/1-11.jpg" /></div>
+			<div class="page"><img src="img/1-12.jpg" /></div>
+			<div class="page"><img src="img/1-13.jpg" /></div>
+			<div class="page"><img src="img/1-14.jpg" /></div>
+		</div>
+		<script type="text/javascript">
+			var winHeight = document.documentElement.clientHeight;
+			var wrap = document.querySelector('.wrap');
+			wrap.style.height = winHeight + 'px';
+			var page = document.querySelectorAll('.page');
+			//定义变量
+			var startX = 0,
+				startY = 0;
+			var moveY = 0,
+				moveY = 0;
+			var topY = 0;
+			var flag = true;
+			var time = 10;
+			var speed = 10;
+			var timer = null;
+			var thisIndex = 0;
+			var item = null;
+			//添加监听事件
+			document.addEventListener('touchstart', touchEvent, false);
+			document.addEventListener('touchmove', touchEvent, false);
+			document, addEventListener('touchend', touchEvent, false);
+			//处理监听事件的函数
+			function touchEvent() {
+				switch(event.type) {
+					case 'touchstart':
+						touchStart();
+						break;
+					case 'touchmove':
+						touchMove();
+						break;
+					case 'touchend':
+						touchEnd();
+						break;
+					default:
+						break;
+				}
+			}
+			//触摸开始函数
+			function touchStart() {
+				var touch = event.touches[0];
+				startX = touch.pageX;
+				startY = touch.pageY;
+
+			}
+			//触摸移动函数
+			function touchMove() {
+				var touch = event.touches[0];
+				moveY = touch.pageY;
+				topY = moveY - startY;
+				for(i = 0; i < page.length; i++) {
+					if(page[i].className == 'page zThisInd') {
+						if(flag == true) {
+							if(topY > 0) {
+								if(i == 0) {
+									thisIndex = page.length;
+								} else {
+									thisIndex = i;
+								}
+								page[thisIndex - 1].className = 'page zNextInd';
+								flag = false;
+							} else {
+								if(i == page.length - 1) {
+									thisIndex = -1;
+								} else {
+									thisIndex = i;
+								}
+								page[thisIndex + 1].className = 'page zNextInd';
+								flag = false;
+							}
+						}
+						page[i].style.top = topY + 'px';
+						item = page[i];
+					}
+				}
+			}
+
+			//触摸结束函数
+			function touchEnd() {
+				if(moveY == 0) {} else {
+					clearInterval(timer);
+					timer = setInterval(function() {
+						if(topY > 0) {
+							topY += speed;
+						}
+						if(topY < 0) {
+							topY -= speed;
+						}
+						item.style.top = topY + 'px';
+						document.removeEventListener('touchstart', touchEvent, false);
+						document.removeEventListener('touchmove', touchEvent, false);
+						if(topY >= winHeight || topY <= -winHeight) {
+							clearInterval(timer);
+							flag = true;
+							item.style.top = '0';
+							item.className = 'page';
+							document.addEventListener('touchstart', touchEvent, false);
+							document.addEventListener('touchmove', touchEvent, false);
+							if(topY >= winHeight) {
+								page[thisIndex - 1].className = 'page zThisInd';
+							} else {
+								page[thisIndex + 1].className = 'page zThisInd';
+							}
+							return;
+						}
+					}, time);
+				}
+			}
+		</script>
+	</body>
+
+</html>
